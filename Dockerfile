@@ -9,7 +9,7 @@ LABEL version=$WEBLATE_VERSION
 LABEL maintainer="Michal Čihař <michal@cihar.com>"
 LABEL org.opencontainers.image.url="https://weblate.org/"
 LABEL org.opencontainers.image.documentation="https://docs.weblate.org/en/latest/admin/install/docker.html"
-LABEL org.opencontainers.image.source="https://github.com/WeblateOrg/docker"
+LABEL org.opencontainers.image.source="https://github.com/iamshoXy/docker"
 LABEL org.opencontainers.image.version=$WEBLATE_VERSION
 LABEL org.opencontainers.image.author="Michal Čihař <michal@weblate.org>"
 LABEL org.opencontainers.image.vendor="Weblate"
@@ -112,24 +112,13 @@ RUN \
     --compile-bytecode \
     --no-binary :all: \
     $(grep -E '^(cffi)==' /app/src/requirements.txt) \
-  && case "$WEBLATE_VERSION" in \
-    *+* ) \
-      uv pip install \
-        --no-cache-dir \
-        --compile-bytecode \
-        -r /app/src/requirements.txt \
-        "https://github.com/translate/translate/archive/master.zip" \
-        "https://github.com/WeblateOrg/language-data/archive/main.zip" \
-        "https://github.com/iamshoXy/docker/archive/$WEBLATE_DOCKER_GIT_REVISION.zip#egg=Weblate[$WEBLATE_EXTRAS]" \
-        ;; \
-    * ) \
-      uv pip install \
-        --no-cache-dir \
-        --compile-bytecode \
-        -r /app/src/requirements.txt \
-        "Weblate[$WEBLATE_EXTRAS]==$WEBLATE_VERSION" \
-      ;; \
-  esac \
+  && uv pip install \
+    --no-cache-dir \
+    --compile-bytecode \
+    -r /app/src/requirements.txt \
+    "https://github.com/translate/translate/archive/master.zip" \
+    "https://github.com/WeblateOrg/language-data/archive/main.zip" \
+    "https://github.com/iamshoXy/weblate/archive/298de091b9a7f1faf6a2ea2b9fe56bb9306b1e8d.zip" \
   && python -c 'from phply.phpparse import make_parser; make_parser()' \
   && ln -s /app/venv/share/weblate/examples/ /app/ \
   && apt-get -y purge \
