@@ -1,5 +1,5 @@
 FROM python:3.12.2-slim-bookworm
- ENV PYVERSION 3.12
+ENV PYVERSION 3.12
 ENV WEBLATE_VERSION 5.4.2
 ENV WEBLATE_EXTRAS all,MySQL,zxcvbn,test
 ARG TARGETARCH
@@ -56,48 +56,48 @@ RUN \
   export DEBIAN_FRONTEND=noninteractive \
   && apt-get update \
   && apt-get install --no-install-recommends -y \
-    nginx-light \
-    bundler \
-    ruby \
-    ruby-dev \
-    cmake \
-    openssh-client \
-    ca-certificates \
-    curl \
-    gir1.2-pango-1.0 \
-    libxmlsec1-openssl \
-    libjpeg62-turbo \
-    gettext \
-    git \
-    git-svn \
-    gnupg \
-    subversion \
-    pkg-config \
-    file \
-    make \
-    locales \
-    libcairo2-dev \
-    libxml2-dev \
-    libacl1-dev \
-    libmariadb3 \
-    libmariadb-dev \
-    libxmlsec1-dev \
-    libsasl2-dev \
-    libldap2-dev \
-    libldap-common \
-    libssl-dev \
-    libffi-dev \
-    libpq-dev \
-    zlib1g-dev \
-    libjpeg62-turbo-dev \
-    libenchant-2-2 \
-    libgirepository1.0-dev \
-    libcairo-gobject2 \
-    gcc \
-    g++ \
-    patch \
-    unzip \
-    xz-utils \
+  nginx-light \
+  bundler \
+  ruby \
+  ruby-dev \
+  cmake \
+  openssh-client \
+  ca-certificates \
+  curl \
+  gir1.2-pango-1.0 \
+  libxmlsec1-openssl \
+  libjpeg62-turbo \
+  gettext \
+  git \
+  git-svn \
+  gnupg \
+  subversion \
+  pkg-config \
+  file \
+  make \
+  locales \
+  libcairo2-dev \
+  libxml2-dev \
+  libacl1-dev \
+  libmariadb3 \
+  libmariadb-dev \
+  libxmlsec1-dev \
+  libsasl2-dev \
+  libldap2-dev \
+  libldap-common \
+  libssl-dev \
+  libffi-dev \
+  libpq-dev \
+  zlib1g-dev \
+  libjpeg62-turbo-dev \
+  libenchant-2-2 \
+  libgirepository1.0-dev \
+  libcairo-gobject2 \
+  gcc \
+  g++ \
+  patch \
+  unzip \
+  xz-utils \
   && c_rehash \
   && echo "en_US.UTF-8 UTF-8" > /etc/locale.gen \
   && locale-gen \
@@ -105,52 +105,52 @@ RUN \
   && curl -L https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add - \
   && apt-get update \
   && apt-get install --no-install-recommends -y \
-    postgresql-client-16 \
+  postgresql-client-16 \
   && cd  /app/src/ \
   && bundle install \
   && bundle clean --force \
   && pip install --no-cache-dir --upgrade $(grep -E '^(pip|wheel|setuptools)==' /app/src/requirements.txt) \
   && pip install --no-cache-dir --no-binary :all: $(grep -E '^(cffi|lxml)==' /app/src/requirements.txt) \
   && case "$WEBLATE_VERSION" in \
-    *+* ) \
-      pip install \
-        --no-cache-dir \
-        -r /app/src/requirements.txt \
-        "https://github.com/translate/translate/archive/master.zip" \
-        "https://github.com/WeblateOrg/language-data/archive/main.zip" \
-        "https://github.com/iamshoXy/docker/archive/$WEBLATE_DOCKER_GIT_REVISION.zip#egg=Weblate[$WEBLATE_EXTRAS]" \
-        ;; \
-    * ) \
-      pip install \
-        --no-cache-dir \
-        -r /app/src/requirements.txt \
-        "Weblate[$WEBLATE_EXTRAS]==$WEBLATE_VERSION" \
-      ;; \
+  *+* ) \
+  pip install \
+  --no-cache-dir \
+  -r /app/src/requirements.txt \
+  "https://github.com/translate/translate/archive/master.zip" \
+  "https://github.com/WeblateOrg/language-data/archive/main.zip" \
+  "https://github.com/iamshoXy/weblate/archive/$WEBLATE_DOCKER_GIT_REVISION.zip#egg=Weblate[$WEBLATE_EXTRAS]" \
+  ;; \
+  * ) \
+  pip install \
+  --no-cache-dir \
+  -r /app/src/requirements.txt \
+  "Weblate[$WEBLATE_EXTRAS]==$WEBLATE_VERSION" \
+  ;; \
   esac \
   && python -c 'from phply.phpparse import make_parser; make_parser()' \
   && ln -s /usr/local/share/weblate/examples/ /app/ \
   && apt-get -y purge \
-    bundler \
-    ruby-dev \
-    cmake \
-    pkg-config \
-    libmariadb-dev \
-    libgirepository1.0-dev \
-    libxml2-dev \
-    libffi-dev \
-    libxmlsec1-dev \
-    libcairo2-dev \
-    libpq-dev \
-    gcc \
-    g++ \
-    file \
-    make \
-    libsasl2-dev \
-    libacl1-dev \
-    libldap2-dev \
-    libssl-dev \
-    libz-dev   \
-    libjpeg62-turbo-dev \
+  bundler \
+  ruby-dev \
+  cmake \
+  pkg-config \
+  libmariadb-dev \
+  libgirepository1.0-dev \
+  libxml2-dev \
+  libffi-dev \
+  libxmlsec1-dev \
+  libcairo2-dev \
+  libpq-dev \
+  gcc \
+  g++ \
+  file \
+  make \
+  libsasl2-dev \
+  libacl1-dev \
+  libldap2-dev \
+  libssl-dev \
+  libz-dev   \
+  libjpeg62-turbo-dev \
   && apt-get -y purge --auto-remove -o APT::AutoRemove::RecommendsImportant=false \
   && apt-get clean \
   && rm -rf /root/.cache /tmp/* /var/lib/apt/lists/*
@@ -185,11 +185,11 @@ RUN rm -f /etc/localtime /etc/timezone \
 
 # Search path for custom modules
 RUN \
-    echo "/app/data/python" > "/usr/local/lib/python${PYVERSION}/site-packages/weblate-docker.pth" && \
-    mkdir -p /app/data/python/customize && \
-    touch /app/data/python/customize/__init__.py && \
-    touch /app/data/python/customize/models.py && \
-    chown -R weblate:weblate /app/data/python
+  echo "/app/data/python" > "/usr/local/lib/python${PYVERSION}/site-packages/weblate-docker.pth" && \
+  mkdir -p /app/data/python/customize && \
+  touch /app/data/python/customize/__init__.py && \
+  touch /app/data/python/customize/models.py && \
+  chown -R weblate:weblate /app/data/python
 
 # Entrypoint
 COPY --chmod=a+rx start health_check /app/bin/
