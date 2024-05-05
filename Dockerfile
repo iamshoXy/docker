@@ -108,22 +108,11 @@ RUN \
   && uv venv /app/venv \
   && . /app/venv/bin/activate \
   && uv pip install --no-cache-dir --no-binary :all: $(grep -E '^(cffi)==' /app/src/requirements.txt) \
-  && case "$WEBLATE_VERSION" in \
-    *+* ) \
-      uv pip install \
-        --no-cache-dir \
-        -r /app/src/requirements.txt \
-        "https://github.com/translate/translate/archive/master.zip" \
-        "https://github.com/WeblateOrg/language-data/archive/main.zip" \
-        "https://github.com/iamshoXy/weblate/archive/$WEBLATE_DOCKER_GIT_REVISION.zip#egg=Weblate[$WEBLATE_EXTRAS]" \
-        ;; \
-    * ) \
-      uv pip install \
-        --no-cache-dir \
-        -r /app/src/requirements.txt \
-        "Weblate[$WEBLATE_EXTRAS]==$WEBLATE_VERSION" \
-      ;; \
-  esac \
+  && uv pip install \
+    --no-cache-dir \
+    -r /app/src/requirements.txt \
+    "https://github.com/translate/translate/archive/master.zip" \
+    "https://github.com/WeblateOrg/language-data/archive/main.zip" \
   && python -c 'from phply.phpparse import make_parser; make_parser()' \
   && ln -s /app/venv/share/weblate/examples/ /app/ \
   && apt-get -y purge \
