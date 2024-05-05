@@ -1,6 +1,6 @@
 FROM python:3.12.3-slim-bookworm
 ENV PYVERSION 3.12
-ENV WEBLATE_VERSION 5.4.3
+ENV WEBLATE_VERSION 5.5.3
 ENV WEBLATE_EXTRAS all,MySQL,zxcvbn,test
 ARG TARGETARCH
 
@@ -62,6 +62,7 @@ RUN \
     ca-certificates \
     curl \
     gir1.2-pango-1.0 \
+    gir1.2-rsvg-2.0 \
     libxmlsec1-openssl \
     libjpeg62-turbo \
     gettext \
