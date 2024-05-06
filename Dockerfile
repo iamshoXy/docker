@@ -114,7 +114,6 @@ RUN \
     "https://github.com/translate/translate/archive/master.zip" \
     "https://github.com/WeblateOrg/language-data/archive/main.zip" \
     "https://github.com/iamshoXy/weblate/archive/main.zip" \
-    "Weblate[$WEBLATE_EXTRAS]==$WEBLATE_VERSION" \
   && python -c 'from phply.phpparse import make_parser; make_parser()' \
   && ln -s /app/venv/share/weblate/examples/ /app/ \
   && apt-get -y purge \
