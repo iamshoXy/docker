@@ -113,7 +113,7 @@ RUN \
     -r /app/src/requirements.txt \
     "https://github.com/translate/translate/archive/master.zip" \
     "https://github.com/WeblateOrg/language-data/archive/main.zip" \
-    "https://github.com/iamshoXy/weblate/archive/ed6e161bcb64833d41f700d56f5ca09228230cc4.zip" \
+    "https://github.com/iamshoXy/weblate/archive/main.zip" \
   && python -c 'from phply.phpparse import make_parser; make_parser()' \
   && ln -s /app/venv/share/weblate/examples/ /app/ \
   && apt-get -y purge \
