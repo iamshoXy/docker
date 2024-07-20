@@ -41,6 +41,7 @@ echo "Starting Weblate $WEBLATE_VERSION"
 # Fix permissions on SSH private key.
 # Fails silently if the file doesn't exist yet.
 chmod 600 /app/data/ssh/id_rsa 2>/dev/null || true
+chmod 600 /app/data/ssh/id_ed25519 2>/dev/null || true
 
 # Check whether data volume is writable
 if [ ! -w /app/data ] ; then
@@ -220,6 +221,7 @@ if [ "$1" = "runserver" ] ; then
 
         # Create or update admin account
         if [ -n "$WEBLATE_ADMIN_PASSWORD" ] ; then
+            echo "Updating admin user password (unset WEBLATE_ADMIN_PASSWORD to disable)..."
             run_weblate createadmin --password="$WEBLATE_ADMIN_PASSWORD" --update --email="$WEBLATE_ADMIN_EMAIL" --name="$WEBLATE_ADMIN_NAME"
         else
             run_weblate createadmin --email="$WEBLATE_ADMIN_EMAIL" --name="$WEBLATE_ADMIN_NAME" || true
@@ -273,7 +275,7 @@ set_real_ip_from 0.0.0.0/0;
     : "${CELERY_MAIN_OPTIONS:="--concurrency $WEBLATE_WORKERS"}"
     : "${CELERY_NOTIFY_OPTIONS:="--concurrency $WEBLATE_WORKERS"}"
     : "${CELERY_TRANSLATE_OPTIONS:="--concurrency $WEBLATE_WORKERS"}"
-    : "${CELERY_MEMORY_OPTIONS:="--concurrency $((WEBLATE_WORKERS / 2))"}"
+    : "${CELERY_MEMORY_OPTIONS:="--concurrency $(( WEBLATE_WORKERS == 1 ? 1 : WEBLATE_WORKERS / 2))"}"
     : "${CELERY_BACKUP_OPTIONS:="--concurrency 1"}"
     : "${CELERY_BEAT_OPTIONS:=""}"
     : "${WEB_WORKERS:="$((WEBLATE_WORKERS + 1))"}"

@@ -39,10 +39,10 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - name: Set up Docker Buildx
-      uses: docker/setup-buildx-action@v3.3.0
+      uses: docker/setup-buildx-action@v3.4.0
       with:
         # renovate: datasource=github-releases depName=docker/buildx
-        version: v0.14.0
+        version: v0.16.1
     - name: Cache Docker layers
       uses: actions/cache@v4
       id: cache
@@ -70,14 +70,14 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - name: Set up QEMU
-      uses: docker/setup-qemu-action@v3.0.0
+      uses: docker/setup-qemu-action@v3.1.0
       with:
         platforms: ${{ matrix.architecture }}
     - name: Set up Docker Buildx
-      uses: docker/setup-buildx-action@v3.3.0
+      uses: docker/setup-buildx-action@v3.4.0
       with:
         # renovate: datasource=github-releases depName=docker/buildx
-        version: v0.14.0
+        version: v0.16.1
     - name: Cache Docker layers
       uses: actions/cache@v4
       id: cache
@@ -110,10 +110,10 @@ jobs:
       with:
         submodules: recursive
     - name: Set up Docker Buildx
-      uses: docker/setup-buildx-action@v3.3.0
+      uses: docker/setup-buildx-action@v3.4.0
       with:
         # renovate: datasource=github-releases depName=docker/buildx
-        version: v0.14.0
+        version: v0.16.1
     - name: Cache Docker layers
       uses: actions/cache@v4
       id: cache
@@ -167,10 +167,10 @@ jobs:
       with:
         submodules: recursive
     - name: Set up Docker Buildx
-      uses: docker/setup-buildx-action@v3.3.0
+      uses: docker/setup-buildx-action@v3.4.0
       with:
         # renovate: datasource=github-releases depName=docker/buildx
-        version: v0.14.0
+        version: v0.16.1
     - name: Cache Docker layers
       uses: actions/cache@v4
       id: cache
@@ -252,10 +252,10 @@ jobs:
       with:
         submodules: recursive
     - name: Set up Docker Buildx
-      uses: docker/setup-buildx-action@v3.3.0
+      uses: docker/setup-buildx-action@v3.4.0
       with:
         # renovate: datasource=github-releases depName=docker/buildx
-        version: v0.14.0
+        version: v0.16.1
     - name: Cache Docker layers
       uses: actions/cache@v4
       id: cache
@@ -337,10 +337,10 @@ jobs:
       with:
         submodules: recursive
     - name: Set up Docker Buildx
-      uses: docker/setup-buildx-action@v3.3.0
+      uses: docker/setup-buildx-action@v3.4.0
       with:
         # renovate: datasource=github-releases depName=docker/buildx
-        version: v0.14.0
+        version: v0.16.1
     - name: Cache Docker layers
       uses: actions/cache@v4
       id: cache
@@ -424,10 +424,10 @@ jobs:
       with:
         submodules: recursive
     - name: Set up Docker Buildx
-      uses: docker/setup-buildx-action@v3.3.0
+      uses: docker/setup-buildx-action@v3.4.0
       with:
         # renovate: datasource=github-releases depName=docker/buildx
-        version: v0.14.0
+        version: v0.16.1
     - name: Cache Docker layers
       uses: actions/cache@v4
       id: cache
@@ -505,10 +505,10 @@ jobs:
       with:
         submodules: recursive
     - name: Set up Docker Buildx
-      uses: docker/setup-buildx-action@v3.3.0
+      uses: docker/setup-buildx-action@v3.4.0
       with:
         # renovate: datasource=github-releases depName=docker/buildx
-        version: v0.14.0
+        version: v0.16.1
     - name: Cache Docker layers
       uses: actions/cache@v4
       id: cache
@@ -591,10 +591,10 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - name: Set up Docker Buildx
-      uses: docker/setup-buildx-action@v3.3.0
+      uses: docker/setup-buildx-action@v3.4.0
       with:
         # renovate: datasource=github-releases depName=docker/buildx
-        version: v0.14.0
+        version: v0.16.1
     - name: Cache Docker layers
       uses: actions/cache@v4
       id: cache
@@ -610,7 +610,7 @@ jobs:
     - name: Checkout the code
       uses: actions/checkout@v4
     - name: Anchore scan action
-      uses: anchore/scan-action@v3
+      uses: anchore/scan-action@v4
       with:
         image: weblate/weblate:test
         fail-build: false
@@ -640,10 +640,10 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - name: Set up Docker Buildx
-      uses: docker/setup-buildx-action@v3.3.0
+      uses: docker/setup-buildx-action@v3.4.0
       with:
         # renovate: datasource=github-releases depName=docker/buildx
-        version: v0.14.0
+        version: v0.16.1
     - name: Cache Docker layers
       uses: actions/cache@v4
       id: cache
@@ -659,7 +659,7 @@ jobs:
     - name: Checkout the code
       uses: actions/checkout@v4
     - name: Run Trivy vulnerability scanner
-      uses: aquasecurity/trivy-action@0.20.0
+      uses: aquasecurity/trivy-action@0.24.0
       with:
         image-ref: weblate/weblate:test
         format: template
@@ -694,14 +694,14 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v4
     - name: Set up QEMU
-      uses: docker/setup-qemu-action@v3.0.0
+      uses: docker/setup-qemu-action@v3.1.0
       with:
         platforms: all
     - name: Set up Docker Buildx
-      uses: docker/setup-buildx-action@v3.3.0
+      uses: docker/setup-buildx-action@v3.4.0
       with:
         # renovate: datasource=github-releases depName=docker/buildx
-        version: v0.14.0
+        version: v0.16.1
     - name: Cache Docker layers
       uses: actions/cache@v4
       id: cache-arm64
@@ -745,14 +745,14 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v4
     - name: Set up QEMU
-      uses: docker/setup-qemu-action@v3.0.0
+      uses: docker/setup-qemu-action@v3.1.0
       with:
         platforms: all
     - name: Set up Docker Buildx
-      uses: docker/setup-buildx-action@v3.3.0
+      uses: docker/setup-buildx-action@v3.4.0
       with:
         # renovate: datasource=github-releases depName=docker/buildx
-        version: v0.14.0
+        version: v0.16.1
     - name: Cache Docker layers
       uses: actions/cache@v4
       id: cache-arm64
