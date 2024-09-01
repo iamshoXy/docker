@@ -26,17 +26,13 @@ jobs:
       MATRIX_ARCHITECTURE: ${{ matrix.architecture }}
     steps:
     - uses: actions/checkout@v4
+    - name: Expose GitHub Runtime
+      uses: crazy-max/ghaction-github-runtime@v3
     - name: Set up Docker Buildx
-      uses: docker/setup-buildx-action@v3.4.0
+      uses: docker/setup-buildx-action@v3.6.1
       with:
         # renovate: datasource=github-releases depName=docker/buildx
-        version: v0.16.1
-    - name: Cache Docker layers
-      uses: actions/cache@v4
-      id: cache
-      with:
-        path: /tmp/.buildx-cache/${{ matrix.architecture }}
-        key: ${{ runner.os }}-buildx-${{ github.sha }}-${{ matrix.architecture }}
+        version: v0.16.2
     - name: Configure Docker build
       run: .github/bin/get-buildx-args
     - name: Build the Docker image
@@ -54,20 +50,16 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - name: Set up QEMU
-      uses: docker/setup-qemu-action@v3.1.0
+      uses: docker/setup-qemu-action@v3.2.0
       with:
         platforms: ${{ matrix.architecture }}
+    - name: Expose GitHub Runtime
+      uses: crazy-max/ghaction-github-runtime@v3
     - name: Set up Docker Buildx
-      uses: docker/setup-buildx-action@v3.4.0
+      uses: docker/setup-buildx-action@v3.6.1
       with:
         # renovate: datasource=github-releases depName=docker/buildx
-        version: v0.16.1
-    - name: Cache Docker layers
-      uses: actions/cache@v4
-      id: cache
-      with:
-        path: /tmp/.buildx-cache/${{ matrix.architecture }}
-        key: ${{ runner.os }}-buildx-${{ github.sha }}-${{ matrix.architecture }}
+        version: v0.16.2
     - name: Configure Docker build
       run: .github/bin/get-buildx-args
     - name: Build the Docker image
@@ -89,17 +81,13 @@ jobs:
     - uses: actions/checkout@v4
       with:
         submodules: recursive
+    - name: Expose GitHub Runtime
+      uses: crazy-max/ghaction-github-runtime@v3
     - name: Set up Docker Buildx
-      uses: docker/setup-buildx-action@v3.4.0
+      uses: docker/setup-buildx-action@v3.6.1
       with:
         # renovate: datasource=github-releases depName=docker/buildx
-        version: v0.16.1
-    - name: Cache Docker layers
-      uses: actions/cache@v4
-      id: cache
-      with:
-        path: /tmp/.buildx-cache/${{ matrix.architecture }}
-        key: ${{ runner.os }}-buildx-${{ github.sha }}-${{ matrix.architecture }}
+        version: v0.16.2
     - name: Build the Docker image
       run: .github/bin/docker-build load
     - name: List Docker images
@@ -142,17 +130,13 @@ jobs:
     - uses: actions/checkout@v4
       with:
         submodules: recursive
+    - name: Expose GitHub Runtime
+      uses: crazy-max/ghaction-github-runtime@v3
     - name: Set up Docker Buildx
-      uses: docker/setup-buildx-action@v3.4.0
+      uses: docker/setup-buildx-action@v3.6.1
       with:
         # renovate: datasource=github-releases depName=docker/buildx
-        version: v0.16.1
-    - name: Cache Docker layers
-      uses: actions/cache@v4
-      id: cache
-      with:
-        path: /tmp/.buildx-cache/${{ matrix.architecture }}
-        key: ${{ runner.os }}-buildx-${{ github.sha }}-${{ matrix.architecture }}
+        version: v0.16.2
     - name: Build the Docker image
       run: .github/bin/docker-build load
     - name: List Docker images
@@ -202,6 +186,18 @@ jobs:
       run: |
         cd docker-compose
         ./test-logs
+    - name: Stop Weblate service
+      run: |
+        cd docker-compose
+        docker compose stop weblate
+    - name: Start Weblate service
+      run: |
+        cd docker-compose
+        docker compose start weblate
+    - name: Check service is running
+      run: |
+        cd docker-compose
+        ./test-online
     - name: Shutdown service
       run: |
         cd docker-compose
@@ -223,17 +219,13 @@ jobs:
     - uses: actions/checkout@v4
       with:
         submodules: recursive
+    - name: Expose GitHub Runtime
+      uses: crazy-max/ghaction-github-runtime@v3
     - name: Set up Docker Buildx
-      uses: docker/setup-buildx-action@v3.4.0
+      uses: docker/setup-buildx-action@v3.6.1
       with:
         # renovate: datasource=github-releases depName=docker/buildx
-        version: v0.16.1
-    - name: Cache Docker layers
-      uses: actions/cache@v4
-      id: cache
-      with:
-        path: /tmp/.buildx-cache/${{ matrix.architecture }}
-        key: ${{ runner.os }}-buildx-${{ github.sha }}-${{ matrix.architecture }}
+        version: v0.16.2
     - name: Build the Docker image
       run: .github/bin/docker-build load
     - name: List Docker images
@@ -283,6 +275,18 @@ jobs:
       run: |
         cd docker-compose
         ./test-logs
+    - name: Stop Weblate service
+      run: |
+        cd docker-compose
+        docker compose stop weblate
+    - name: Start Weblate service
+      run: |
+        cd docker-compose
+        docker compose start weblate
+    - name: Check service is running
+      run: |
+        cd docker-compose
+        ./test-online
     - name: Shutdown service
       run: |
         cd docker-compose
@@ -304,17 +308,13 @@ jobs:
     - uses: actions/checkout@v4
       with:
         submodules: recursive
+    - name: Expose GitHub Runtime
+      uses: crazy-max/ghaction-github-runtime@v3
     - name: Set up Docker Buildx
-      uses: docker/setup-buildx-action@v3.4.0
+      uses: docker/setup-buildx-action@v3.6.1
       with:
         # renovate: datasource=github-releases depName=docker/buildx
-        version: v0.16.1
-    - name: Cache Docker layers
-      uses: actions/cache@v4
-      id: cache
-      with:
-        path: /tmp/.buildx-cache/${{ matrix.architecture }}
-        key: ${{ runner.os }}-buildx-${{ github.sha }}-${{ matrix.architecture }}
+        version: v0.16.2
     - name: Build the Docker image
       run: .github/bin/docker-build load
     - name: List Docker images
@@ -387,17 +387,86 @@ jobs:
     - uses: actions/checkout@v4
       with:
         submodules: recursive
+    - name: Expose GitHub Runtime
+      uses: crazy-max/ghaction-github-runtime@v3
     - name: Set up Docker Buildx
-      uses: docker/setup-buildx-action@v3.4.0
+      uses: docker/setup-buildx-action@v3.6.1
       with:
         # renovate: datasource=github-releases depName=docker/buildx
-        version: v0.16.1
-    - name: Cache Docker layers
-      uses: actions/cache@v4
-      id: cache
+        version: v0.16.2
+    - name: Build the Docker image
+      run: .github/bin/docker-build load
+    - name: List Docker images
+      run: docker image ls --all
+    - name: Generate configuration
+      run: |
+        cd docker-compose
+        ./test-generate 8080 http split
+    - name: Startup container
+      run: |
+        cd docker-compose
+        ./test-boot
+    - name: List Python packages
+      run: |
+        cd docker-compose
+        ./test-pip
+    - name: Inspect container
+      run: |
+        cd docker-compose
+        ./test-inspect
+    - name: Check service is running
+      run: |
+        cd docker-compose
+        ./test-online
+    - name: Check service health status
+      run: |
+        cd docker-compose
+        ./test-health
+    - name: Run Django Checks
+      run: |
+        cd docker-compose
+        ./test-checks
+    - name: Verify supervisor
+      run: |
+        cd docker-compose
+        ./test-supervisor
+    - name: Test admin creation
+      run: |
+        cd docker-compose
+        ./test-admin
+    - name: Display logs
+      if: always()
+      run: |
+        cd docker-compose
+        ./test-logs
+    - name: Shutdown service
+      run: |
+        cd docker-compose
+        ./test-stop
+
+  test-single-celery:
+    runs-on: ubuntu-22.04
+    name: Test single celery process, stable, ${{ matrix.architecture }}
+    needs: [build]
+    strategy:
+      matrix:
+        architecture: [linux/amd64]
+    env:
+      MATRIX_ARCHITECTURE: ${{ matrix.architecture }}
+      COMPOSE_PROJECT_NAME: wl
+      PYTHONUNBUFFERED: 1
+      TEST_CONTAINER: weblate/weblate:test
+    steps:
+    - uses: actions/checkout@v4
       with:
-        path: /tmp/.buildx-cache/${{ matrix.architecture }}
-        key: ${{ runner.os }}-buildx-${{ github.sha }}-${{ matrix.architecture }}
+        submodules: recursive
+    - name: Expose GitHub Runtime
+      uses: crazy-max/ghaction-github-runtime@v3
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3.6.1
+      with:
+        # renovate: datasource=github-releases depName=docker/buildx
+        version: v0.16.2
     - name: Build the Docker image
       run: .github/bin/docker-build load
     - name: List Docker images
@@ -464,17 +533,13 @@ jobs:
     - uses: actions/checkout@v4
       with:
         submodules: recursive
+    - name: Expose GitHub Runtime
+      uses: crazy-max/ghaction-github-runtime@v3
     - name: Set up Docker Buildx
-      uses: docker/setup-buildx-action@v3.4.0
+      uses: docker/setup-buildx-action@v3.6.1
       with:
         # renovate: datasource=github-releases depName=docker/buildx
-        version: v0.16.1
-    - name: Cache Docker layers
-      uses: actions/cache@v4
-      id: cache
-      with:
-        path: /tmp/.buildx-cache/${{ matrix.architecture }}
-        key: ${{ runner.os }}-buildx-${{ github.sha }}-${{ matrix.architecture }}
+        version: v0.16.2
     - name: Build the Docker image
       run: .github/bin/docker-build load
     - name: List Docker images
@@ -486,7 +551,7 @@ jobs:
     - name: Generate SSL certificate
       run: |
         cd docker-compose
-        docker-compose up --no-start
+        docker compose up --no-start
         VOLUMEPATH=$(docker volume inspect -f '{{.Mountpoint}}' wl_weblate-data)
         sudo mkdir -p $VOLUMEPATH/ssl
         sudo openssl req -x509 -nodes -days 365 -subj "/CN=localhost" -newkey rsa:2048 -keyout $VOLUMEPATH/ssl/privkey.pem -out $VOLUMEPATH/ssl/fullchain.pem
@@ -547,17 +612,13 @@ jobs:
       MATRIX_ARCHITECTURE: ${{ matrix.architecture }}
     steps:
     - uses: actions/checkout@v4
+    - name: Expose GitHub Runtime
+      uses: crazy-max/ghaction-github-runtime@v3
     - name: Set up Docker Buildx
-      uses: docker/setup-buildx-action@v3.4.0
+      uses: docker/setup-buildx-action@v3.6.1
       with:
         # renovate: datasource=github-releases depName=docker/buildx
-        version: v0.16.1
-    - name: Cache Docker layers
-      uses: actions/cache@v4
-      id: cache
-      with:
-        path: /tmp/.buildx-cache/${{ matrix.architecture }}
-        key: ${{ runner.os }}-buildx-${{ github.sha }}-${{ matrix.architecture }}
+        version: v0.16.2
     - name: Build the Docker image
       run: .github/bin/docker-build load
     - name: List Docker images
@@ -593,17 +654,13 @@ jobs:
       MATRIX_ARCHITECTURE: ${{ matrix.architecture }}
     steps:
     - uses: actions/checkout@v4
+    - name: Expose GitHub Runtime
+      uses: crazy-max/ghaction-github-runtime@v3
     - name: Set up Docker Buildx
-      uses: docker/setup-buildx-action@v3.4.0
+      uses: docker/setup-buildx-action@v3.6.1
       with:
         # renovate: datasource=github-releases depName=docker/buildx
-        version: v0.16.1
-    - name: Cache Docker layers
-      uses: actions/cache@v4
-      id: cache
-      with:
-        path: /tmp/.buildx-cache/${{ matrix.architecture }}
-        key: ${{ runner.os }}-buildx-${{ github.sha }}-${{ matrix.architecture }}
+        version: v0.16.2
     - name: Build the Docker image
       run: .github/bin/docker-build load
     - name: List Docker images
@@ -628,6 +685,31 @@ jobs:
         name: Trivy scan SARIF
         path: trivy-results.sarif
 
+  merge:
+    runs-on: ubuntu-22.04
+    name: Merge images
+    needs:
+    - build
+    - buildx
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+    - name: Set up QEMU
+      uses: docker/setup-qemu-action@v3.2.0
+      with:
+        platforms: all
+    - name: Expose GitHub Runtime
+      uses: crazy-max/ghaction-github-runtime@v3
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3.6.1
+      with:
+        # renovate: datasource=github-releases depName=docker/buildx
+        version: v0.16.2
+    - name: Configure Docker build
+      run: .github/bin/get-buildx-args
+    - name: Merge the Docker images
+      run: .github/bin/docker-build
+
   push_dockerhub:
     runs-on: ubuntu-22.04
     name: Publish to Docker Hub, stable
@@ -640,31 +722,22 @@ jobs:
     - buildx
     - anchore
     - trivy
+    - merge
     if: ${{ (startsWith(github.ref, 'refs/tags/') || (github.ref == 'refs/heads/main')) && github.repository == 'WeblateOrg/docker' }}
     steps:
     - name: Checkout
       uses: actions/checkout@v4
     - name: Set up QEMU
-      uses: docker/setup-qemu-action@v3.1.0
+      uses: docker/setup-qemu-action@v3.2.0
       with:
         platforms: all
+    - name: Expose GitHub Runtime
+      uses: crazy-max/ghaction-github-runtime@v3
     - name: Set up Docker Buildx
-      uses: docker/setup-buildx-action@v3.4.0
+      uses: docker/setup-buildx-action@v3.6.1
       with:
         # renovate: datasource=github-releases depName=docker/buildx
-        version: v0.16.1
-    - name: Cache Docker layers
-      uses: actions/cache@v4
-      id: cache-arm64
-      with:
-        path: /tmp/.buildx-cache/linux/arm64
-        key: ${{ runner.os }}-buildx-${{ github.sha }}-linux/arm64
-    - name: Cache Docker layers
-      uses: actions/cache@v4
-      id: cache-amd64
-      with:
-        path: /tmp/.buildx-cache/linux/amd64
-        key: ${{ runner.os }}-buildx-${{ github.sha }}-linux/amd64
+        version: v0.16.2
     - name: DockerHub login
       run: echo "${{ secrets.DOCKERHUB_ACCESS_TOKEN }}" | docker login --username "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
     - name: Configure Docker build
@@ -686,6 +759,7 @@ jobs:
     - buildx
     - anchore
     - trivy
+    - merge
     if: ${{ (startsWith(github.ref, 'refs/tags/') || (github.ref == 'refs/heads/main')) && github.repository == 'WeblateOrg/docker' }}
     env:
       DOCKER_IMAGE: ghcr.io/weblateorg/weblate
@@ -693,26 +767,16 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v4
     - name: Set up QEMU
-      uses: docker/setup-qemu-action@v3.1.0
+      uses: docker/setup-qemu-action@v3.2.0
       with:
         platforms: all
+    - name: Expose GitHub Runtime
+      uses: crazy-max/ghaction-github-runtime@v3
     - name: Set up Docker Buildx
-      uses: docker/setup-buildx-action@v3.4.0
+      uses: docker/setup-buildx-action@v3.6.1
       with:
         # renovate: datasource=github-releases depName=docker/buildx
-        version: v0.16.1
-    - name: Cache Docker layers
-      uses: actions/cache@v4
-      id: cache-arm64
-      with:
-        path: /tmp/.buildx-cache/linux/arm64
-        key: ${{ runner.os }}-buildx-${{ github.sha }}-linux/arm64
-    - name: Cache Docker layers
-      uses: actions/cache@v4
-      id: cache-amd64
-      with:
-        path: /tmp/.buildx-cache/linux/amd64
-        key: ${{ runner.os }}-buildx-${{ github.sha }}-linux/amd64
+        version: v0.16.2
     - name: Login to GitHub Container Registry
       if: ${{ github.event_name != 'pull_request'}}
       uses: docker/login-action@v3
