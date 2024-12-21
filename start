@@ -104,11 +104,13 @@ export PGPASSWORD="$POSTGRES_PASSWORD"
 export PGSSLMODE="$POSTGRES_SSL_MODE"
 
 # Update the time zone
-zonefile="/usr/share/zoneinfo/$WEBLATE_TIME_ZONE"
-if [ -n "$WEBLATE_TIME_ZONE" ] && [ -f "$zonefile" ] ; then
-    cat "$zonefile" > /tmp/localtime
-else
-    cat /usr/share/zoneinfo/Etc/UTC > /tmp/localtime
+if [ -w /tmp/localtime ] ; then
+    zonefile="/usr/share/zoneinfo/$WEBLATE_TIME_ZONE"
+    if [ -n "$WEBLATE_TIME_ZONE" ] && [ -f "$zonefile" ] ; then
+        cat "$zonefile" > /tmp/localtime
+    else
+        cat /usr/share/zoneinfo/Etc/UTC > /tmp/localtime
+    fi
 fi
 
 # Create fake Python app for customization
@@ -258,12 +260,7 @@ if [ "$1" = "runserver" ] ; then
     mkdir -p /run/celery
     rm -f /run/celery/beat.pid
 
-    # Generate nginx configuration
-    if [ -f /app/data/ssl/privkey.pem ] ; then
-        template=/etc/nginx/ssl.tpl
-    else
-        template=/etc/nginx/default.tpl
-    fi
+    # Parse upstream X-Forwarded-For
     case "$WEBLATE_IP_PROXY_HEADER" in
         HTTP_X_FORWARDED_FOR)
             WEBLATE_REALIP="
@@ -275,6 +272,16 @@ set_real_ip_from 0.0.0.0/0;
             WEBLATE_REALIP=""
             ;;
     esac
+    # Generate nginx configuration
+    if [ -f /app/data/ssl/privkey.pem ] ; then
+        template=/etc/nginx/ssl.tpl
+        if [ -z "$WEBLATE_IP_PROXY_HEADER" ] ; then
+            # Use X-Forwarded-For from the built-in nginx
+            export WEBLATE_IP_PROXY_HEADER=HTTP_X_FORWARDED_FOR
+        fi
+    else
+        template=/etc/nginx/default.tpl
+    fi
 
     export WEBLATE_REALIP
     mkdir -p /tmp/nginx
@@ -295,7 +302,7 @@ set_real_ip_from 0.0.0.0/0;
     : "${CELERY_BACKUP_OPTIONS:="--concurrency 1"}"
     : "${CELERY_BEAT_OPTIONS:=""}"
     : "${CELERY_SINGLE_OPTIONS:="--concurrency $WEBLATE_WORKERS"}"
-    : "${WEB_WORKERS:="$((WEBLATE_WORKERS + 1))"}"
+    : "${WEB_WORKERS:="$WEBLATE_WORKERS"}"
     # This is for legacy configurations, should be removed in the future
     if [ -n "$UWSGI_WORKERS" ] ; then
         echo "Configuration using UWSGI_WORKERS is deprecated, please use WEB_WORKERS instead!"
