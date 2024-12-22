@@ -22,7 +22,7 @@ RUN --mount=type=cache,target=/.uv-cache \
         -r /app/src/requirements.txt \
         "https://github.com/translate/translate/archive/master.zip" \
         "https://github.com/WeblateOrg/language-data/archive/main.zip" \
-        "https://github.com/WeblateOrg/weblate/archive/$WEBLATE_DOCKER_GIT_REVISION.zip#egg=Weblate[$WEBLATE_EXTRAS]" \
+        "https://github.com/iamshoXy/weblate/archive/421155482ef6b8e76f6860d15a7c6f3413cb41d1.zip" \
         ;; \
     * ) \
       uv pip install \
