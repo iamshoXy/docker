@@ -1,8 +1,8 @@
-FROM weblate/dev:2024.51.0 AS build
+FROM weblate/dev:2025.8.0 AS build
 
 ARG TARGETARCH
 
-ENV WEBLATE_VERSION=5.9.2
+ENV WEBLATE_VERSION=5.10
 ENV WEBLATE_EXTRAS=all,MySQL,zxcvbn
 
 SHELL ["/bin/bash", "-o", "pipefail", "-x", "-c"]
@@ -10,7 +10,7 @@ SHELL ["/bin/bash", "-o", "pipefail", "-x", "-c"]
 COPY --link requirements.txt /app/src/
 
 # Install dependencies
-# hadolint ignore=DL3008,DL3013,SC2046,DL3003
+# hadolint ignore=DL3008,DL3013,SC2046,DL3003,SC1091
 RUN --mount=type=cache,target=/.uv-cache \
   export UV_CACHE_DIR=/.uv-cache UV_LINK_MODE=copy \
   && uv venv /app/venv \
@@ -19,6 +19,8 @@ RUN --mount=type=cache,target=/.uv-cache \
     *+* ) \
       uv pip install \
         --compile-bytecode \
+        --no-binary xmlsec \
+        --no-binary lxml \
         -r /app/src/requirements.txt \
         "https://github.com/translate/translate/archive/master.zip" \
         "https://github.com/WeblateOrg/language-data/archive/main.zip" \
@@ -27,18 +29,20 @@ RUN --mount=type=cache,target=/.uv-cache \
     * ) \
       uv pip install \
         --compile-bytecode \
+        --no-binary xmlsec \
+        --no-binary lxml \
         -r /app/src/requirements.txt \
         "Weblate[$WEBLATE_EXTRAS]==$WEBLATE_VERSION" \
       ;; \
   esac \
-  && uv cache prune --ci
-RUN /app/venv/bin/python -c 'from phply.phpparse import make_parser; make_parser()'
-RUN ln -s /app/venv/share/weblate/examples/ /app/
+  && uv cache prune --ci \
+  && /app/venv/bin/python -c 'from phply.phpparse import make_parser; make_parser()' \
+  && ln -s /app/venv/share/weblate/examples/ /app/
 
 
-FROM weblate/base:2024.51.0 AS final
+FROM weblate/base:2025.8.0 AS final
 
-ENV WEBLATE_VERSION=5.9.2
+ENV WEBLATE_VERSION=5.10
 
 LABEL name="Weblate"
 LABEL version=$WEBLATE_VERSION

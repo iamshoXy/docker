@@ -38,10 +38,10 @@ jobs:
     - name: Expose GitHub Runtime
       uses: crazy-max/ghaction-github-runtime@v3
     - name: Set up Docker Buildx
-      uses: docker/setup-buildx-action@v3.8.0
+      uses: docker/setup-buildx-action@v3.9.0
       with:
         # renovate: datasource=github-releases depName=docker/buildx
-        version: v0.19.3
+        version: v0.20.1
     - name: Adjust bleeding edge image
       if: inputs.variant == 'bleeding'
       run: .github/bin/bleeding ${{inputs.weblate_sha}}  ${{inputs.weblate_date}}
@@ -59,10 +59,10 @@ jobs:
       working-directory: docker-compose
       run: |
         docker compose up --no-start
-        VOLUMEPATH=$(docker volume inspect -f '{{.Mountpoint}}' wl_weblate-data)
-        sudo mkdir -p $VOLUMEPATH/ssl
-        sudo openssl req -x509 -nodes -days 365 -subj "/CN=localhost" -newkey rsa:2048 -keyout $VOLUMEPATH/ssl/privkey.pem -out $VOLUMEPATH/ssl/fullchain.pem
-        sudo chown -R 1000:1000 $VOLUMEPATH/ssl
+        VOLUMEPATH="$(docker volume inspect -f '{{.Mountpoint}}' wl_weblate-data)"
+        sudo mkdir -p "$VOLUMEPATH/ssl"
+        sudo openssl req -x509 -nodes -days 365 -subj "/CN=localhost" -newkey rsa:2048 -keyout "$VOLUMEPATH/ssl/privkey.pem" -out "$VOLUMEPATH/ssl/fullchain.pem"
+        sudo chown -R 1000:1000 "$VOLUMEPATH/ssl"
     - name: Startup container
       working-directory: docker-compose
       run: ./test-boot
@@ -109,3 +109,5 @@ jobs:
     - name: Shutdown service
       working-directory: docker-compose
       run: ./test-stop
+permissions:
+  contents: read
